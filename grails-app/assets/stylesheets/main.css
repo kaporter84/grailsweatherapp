@@ -298,10 +298,7 @@ fieldset.embedded legend {
 
 .errors,
 .message {
-    font-size: 0.8em;
-    line-height: 2;
-    margin: 1em 2em;
-    padding: 0.25em;
+    font-size: 1em;
 }
 
 .message {
@@ -320,6 +317,7 @@ fieldset.embedded legend {
     -moz-box-shadow: 0 0 0.25em #ff8888;
     -webkit-box-shadow: 0 0 0.25em #ff8888;
     box-shadow: 0 0 0.25em #ff8888;
+    margin: 5px;
 }
 
 .errors ul,
@@ -580,4 +578,11 @@ img.grails-logo {
      text-align: center;
      border: 1px solid #c0d3db;
      float: left;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
 }
