@@ -29,13 +29,9 @@ class WeatherService implements GrailsConfigurationAware {
     
     @CompileDynamic
     CurrentWeather currentWeather(ZipDomain zip, String countryCode, Unit unit) {
-        String zipCode = 0
-        if(zip != null){
-            zipCode = zip.zipCode
-        }
         RestBuilder rest = new RestBuilder()
         String url = "${openWeatherUrl}/data/2.5/weather?zip={zipCode},{countryCode}&appid={appid}"
-        Map params = [zipCode: zipCode, countryCode: countryCode, appid: appid]
+        Map params = [zipCode: zip.zipCode, countryCode: countryCode, appid: appid]
         String unitParam = unitParameter(unit)
         if ( unitParam ) {
             params.units = unitParam
@@ -47,19 +43,19 @@ class WeatherService implements GrailsConfigurationAware {
         }
 
         if ( restResponse.statusCode.value() == 200 && restResponse.json ) {
-            return WeatherParser.currentWeatherFromJSONElement(restResponse.json) 
+            return WeatherParser.currentWeatherFromJSONElement(restResponse.json)
         }
         null 
     }
     
     String unitParameter(Unit unit)  {
         switch ( unit ) {
-            case Unit.Metric:
-                return 'metric'
-            case Unit.Imperial:
-                return 'imperial'
-            default:
-                return null
+        case Unit.Metric:
+            return 'metric'
+        case Unit.Imperial:
+            return 'imperial'
+        default:
+            return null
         }
     }
 
