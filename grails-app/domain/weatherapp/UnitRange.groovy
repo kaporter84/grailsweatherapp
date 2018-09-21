@@ -1,5 +1,6 @@
 package weatherapp
 
+//This class is to faciliate the need to populate the Unit Type drop down menu
 enum UnitRange {
 
     Imperial ("Imperial"),

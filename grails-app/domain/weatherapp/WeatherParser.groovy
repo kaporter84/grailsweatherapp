@@ -4,6 +4,8 @@ import groovy.transform.CompileStatic
 import org.grails.web.json.JSONElement
 import groovy.transform.CompileDynamic
 
+
+//Parser to handle converting the json data from openweather to java objects
 @CompileStatic
 class WeatherParser {
 

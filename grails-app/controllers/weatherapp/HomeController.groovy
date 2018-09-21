@@ -10,23 +10,21 @@ class HomeController {
     WeatherService weatherService
     
     def index() {
-        def zipDomain = new ZipDomain()
-        render(view: "weatherForm", model: [zipdomain: zipDomain])
+        render(view: "weatherForm", model: [zipdomain: new ZipDomain()])
     }
 
     def weatherByZip() {
-        
-        def ZipDomain zip = new ZipDomain(zipCode: params.zipCode)       
-        if(zip.validate()){
-            Unit unitEnum = Unit.unitWithString(params.unitRange)
-            CurrentWeather currentWeather = weatherService.currentWeather(zip, unitEnum)
-            if(zipCodeService.isRealZipCode(currentWeather)){
-                render(view: "currentWeather", model: [currentWeather: currentWeather,  unit: unitEnum])
+        ZipDomain zip = new ZipDomain(zipCode: params.zipCode) //create ZipDomain from user provided zip code       
+        if(zip.validate()) { //validate the ZipDomain against its constraints, if fails return it back to the default view
+            Unit unitEnum = Unit.unitWithString(params.unitRange) //create Unit from user selected input
+            CurrentWeather currentWeather = weatherService.currentWeather(zip, unitEnum) //create currentWeather object from weatherService
+            if(zipCodeService.isRealZipCode(currentWeather)){ //validate if ZipCode is valid based on if openweather returned null or not
+                render(view: "currentWeather", model: [currentWeather: currentWeather,  unit: unitEnum]) //return if valid zip
             } else {
-                render(view: "weatherForm", model: [zipdomain: zipCodeService.updateZipValidStatus(zip, true)])
+                render(view: "weatherForm", model: [zipdomain: zipCodeService.updateZipValidStatus(zip, true)]) //return if invalid zip
             }
         } else {
-            render(view: "weatherForm", model: [zipdomain: zip]) 
+            render(view: "weatherForm", model: [zipdomain: zip]) //return if ZipDomain fails validation
         }
     }
 }

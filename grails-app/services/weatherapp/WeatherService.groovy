@@ -29,27 +29,37 @@ class WeatherService implements GrailsConfigurationAware {
     
     @CompileDynamic
     CurrentWeather currentWeather(ZipDomain zip, String countryCode, Unit unit) {
-        log.info "Checking current weather for zip code: " + zip.zipCode
-        RestBuilder rest = new RestBuilder()
-        String url = "${openWeatherUrl}/data/2.5/weather?zip={zipCode},{countryCode}&appid={appid}"
-        Map params = [zipCode: zip.zipCode, countryCode: countryCode, appid: appid]
-        String unitParam = unitParameter(unit)
-        if ( unitParam ) {
-            params.units = unitParam
-            url += "&units={units}"
-            log.info "Unit Type selected: " + unitParam
-        }
+        try {
+            if(zip && unit){ //check if ZipDomain or Unit is null
+                log.info "Checking current weather for zip code: " + zip.zipCode
+                RestBuilder rest = new RestBuilder()
+                String url = "${openWeatherUrl}/data/2.5/weather?zip={zipCode},{countryCode}&appid={appid}"
+                Map params = [zipCode: zip.zipCode, countryCode: countryCode, appid: appid]
+                String unitParam = unitParameter(unit) //to take the input from the UI, validate it, and return proper String
+                if ( unitParam ) { //check String and populate parameters as well as the URL
+                    params.units = unitParam
+                    url += "&units={units}"
+                    log.info "Unit Type selected: " + unitParam
+                }
         
-        RestResponse restResponse = rest.get(url) { 
-            urlVariables params
-        }
+                RestResponse restResponse = rest.get(url) { //execute HTTP GET command against URL with the mapped data
+                    urlVariables params
+                }
 
-        if ( restResponse.statusCode.value() == 200 && restResponse.json ) {
-            return WeatherParser.currentWeatherFromJSONElement(restResponse.json)
+                //check response and if valid return currentWeather object
+                if ( restResponse.statusCode.value() == 200 && restResponse.json ) {
+                    return WeatherParser.currentWeatherFromJSONElement(restResponse.json)
+                }
+            } else {
+                log.error "Zip or Unit is null"
+            }
+        } catch(Exception e) {
+            log.error "Error ${e.message}", e
         }
         null 
     }
     
+    //unitParameter is used to test if the unit passed equals one of the proper options
     String unitParameter(Unit unit)  {
         switch ( unit ) {
         case Unit.Metric:

@@ -2,16 +2,29 @@ package weatherapp
 
 class ZipCodeService {
     
+    //Method to check to see if currentWeather is null or not before returning to view
     boolean isRealZipCode(CurrentWeather currentWeather) {
-        if(currentWeather == null){
-            return false
+        try {
+            if(currentWeather){
+                return true
+            } else {
+                log.error "Zip code returned invalid."
+                return false
+            }
+        } catch(Exception e) {
+            log.error "Error ${e.message}", e
         }
-        return true
     }
     
-   
+    //Method to properly update ZipDomain with the new status of the zipCode before returning to the view
     ZipDomain updateZipValidStatus(ZipDomain zip, boolean status) {
-        zip.invalidZipCode = status
-        return zip;
+        try {
+            if(zip){
+                zip.invalidZipCode = status
+                return zip;
+            }
+        } catch(Exception e) {
+            log.error "Error ${e.message}", e
+        }
     }
 }
