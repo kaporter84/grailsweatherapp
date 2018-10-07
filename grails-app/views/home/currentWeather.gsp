@@ -7,39 +7,41 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
-    <head>
-        <meta name="layout" content="main" />
-    </head>
-    <body>
-        <div class="container">
-            <div class="col-centered">
-                <div class="row">
+<head>
+    <meta name="layout" content="main"/>
+</head>
 
-                    <g:if test="${currentWeather != null}">
-                        <g:if test="${currentWeather.weather}">
-                            <g:each in="${currentWeather.weather}" var="weather">
-                                <div class="col-sm-4 col-lg-4">
-                                    <div class="weatherBlock">
-                                        <h2><b>${currentWeather.name}</b></h2>
-                                        <h3>${currentWeather.main?.temp} <openweather:temperatureSymbol unit="${unit}"/></h3>
-                                        <openweather:image icon="${weather.icon}"/>
-                                        <h4>${weather.description}</h4>
-                                    </div>
-                                </div>
-                            </g:each>
+<body>
+<div class="container">
+    <div class="col-centered">
+        <div class="row">
 
-                        </g:if>
-                    </g:if>
+            <g:if test="${currentWeather != null}">
+                <g:if test="${currentWeather.weather}">
+                    <g:each in="${currentWeather.weather}" var="weather">
+                        <div class="col-sm-4 col-lg-4">
+                            <div class="weatherBlock">
+                                <h2><b>${currentWeather.name}</b></h2>
 
-                    <g:elseif test="${currentWeather == null}">
-                        <div class="col">
-                            <div class="alert alert-danger">
-                                <strong><g:message code="weatherform.invalidzipcode"/></strong>
+                                <h3>${currentWeather.main?.temp} <openweather:temperatureSymbol unit="${unit}"/></h3>
+                                <openweather:image icon="${weather.icon}"/>
+                                <h4>${weather.description}</h4>
                             </div>
                         </div>
-                    </g:elseif>
+                    </g:each>
+
+                </g:if>
+            </g:if>
+
+            <g:elseif test="${currentWeather == null}">
+                <div class="col">
+                    <div class="alert alert-danger">
+                        <strong><g:message code="weatherform.invalidzipcode"/></strong>
+                    </div>
                 </div>
-            </div>
+            </g:elseif>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>
